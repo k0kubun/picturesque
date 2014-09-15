@@ -20,6 +20,7 @@ func main() {
 	r := gin.Default()
 	r.LoadHTMLTemplates("views/*")
 	r.GET("/", showIndex)
+	r.POST("/twitpic", uploadTwitpic)
 
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
