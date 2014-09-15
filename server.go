@@ -16,10 +16,13 @@ func showIndex(c *gin.Context) {
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
+	// Simple security
+	basePath := getEnv("KEY", "k0kubun")
+
 	r := gin.Default()
 	r.LoadHTMLTemplates("views/*")
 	r.GET("/", showIndex)
-	r.POST("/twitpic", uploadTwitpic)
+	r.POST("/"+basePath+"/twitpic", uploadTwitpic)
 
 	r.Run(":" + getEnv("PORT", "3000"))
 }

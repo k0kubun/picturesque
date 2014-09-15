@@ -1,6 +1,13 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"io"
+	"mime/multipart"
+	"os"
+	"strings"
+
+	"github.com/gin-gonic/gin"
+)
 
 type image struct {
 	Id        int    `xml:"id"`
@@ -19,19 +26,76 @@ type user struct {
 	ScreenName string `xml:"screen_name"`
 }
 
+// For YoruFukurou image upload (only xml supported)
+// API specification: http://dev.twitpic.com/docs/2/upload/
+const uploadMaxBytes = 5 * 1024 * 1024
+
 func uploadTwitpic(c *gin.Context) {
+	req := c.Request
+	err := req.ParseMultipartForm(uploadMaxBytes)
+	if err != nil {
+		c.String(404, "File size is too big")
+		return
+	}
+
+	files := req.MultipartForm.File["media"]
+	if len(files) < 1 {
+		c.String(404, "File is not uploaded")
+		return
+	}
+
+	file, err := files[0].Open()
+	defer file.Close()
+	if err != nil {
+		c.String(404, "Uploaded file open error")
+		return
+	}
+
+	hash, _ := randomString(15)
+	ext := fileExtension(files[0].Filename)
+	path := hash + "." + ext
+
+	err := saveFile(file, "/tmp/"+path)
+	if err != nil {
+		c.String(404, "Server storage is full")
+		return
+	}
+
+	// FIXME: return valid params
 	c.XML(200, image{
-		Id:        1,
-		Text:      "test",
-		Url:       "http://i.gyazo.com/cfe106ee557900c6cbbc206177913a55.png",
-		Width:     651,
-		Height:    420,
-		Size:      192839,
-		Type:      "png",
+		Id:        0,
+		Text:      "text",
+		Url:       "http://localhost:3000/" + path,
+		Width:     0,
+		Height:    0,
+		Size:      0,
+		Type:      ext,
 		Timestamp: "Wed, 05 May 2010 16:11:15 +0000",
 		User: user{
 			Id:         1,
 			ScreenName: "k0kubun",
 		},
 	})
+}
+
+func saveFile(file multipart.File, filepath string) error {
+	dst, err := os.Create(filepath)
+	defer dst.Close()
+	if err != nil {
+		return err
+	}
+
+	_, err = io.Copy(dst, file)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func fileExtension(filename string) string {
+	texts := strings.Split(filename, ".")
+	if len(texts) == 0 {
+		return ""
+	}
+	return texts[len(texts)-1]
 }
