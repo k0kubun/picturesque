@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"runtime"
 
 	"github.com/gin-gonic/gin"
@@ -22,9 +21,5 @@ func main() {
 	r.GET("/", showIndex)
 	r.POST("/twitpic", uploadTwitpic)
 
-	port := os.Getenv("PORT")
-	if len(port) == 0 {
-		port = "3000"
-	}
-	r.Run(":" + port)
+	r.Run(":" + getEnv("PORT", "3000"))
 }
