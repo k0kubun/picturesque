@@ -4,13 +4,14 @@ Personal server for image distribution
 
 ## Features
 
-- Capable of YoruFukurou image upload
+- YoruFukurou image upload
   - i.e. compatible with Twitpic API v2
-- Gyazo server with simple authorization
 
 ## Pending features
 
+- Tweetbot image upload
 - Gifzo server
+- Gyazo server with simple authorization
 
 ## Not supported features
 

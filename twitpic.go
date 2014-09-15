@@ -1,9 +1,6 @@
 package main
 
 import (
-	"io"
-	"mime/multipart"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -55,7 +52,7 @@ func uploadTwitpic(c *gin.Context) {
 	ext := fileExtension(files[0].Filename)
 	path := hash + "." + ext
 
-	err := saveFile(file, "/tmp/"+path)
+	err = saveImage(file, path)
 	if err != nil {
 		c.String(404, "Server storage is full")
 		return
@@ -76,20 +73,6 @@ func uploadTwitpic(c *gin.Context) {
 			ScreenName: "k0kubun",
 		},
 	})
-}
-
-func saveFile(file multipart.File, filepath string) error {
-	dst, err := os.Create(filepath)
-	defer dst.Close()
-	if err != nil {
-		return err
-	}
-
-	_, err = io.Copy(dst, file)
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 func fileExtension(filename string) string {

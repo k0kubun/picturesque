@@ -22,6 +22,7 @@ func main() {
 	r := gin.Default()
 	r.LoadHTMLTemplates("views/*")
 	r.GET("/", showIndex)
+	r.GET("/:image_path", showImage)
 	r.POST("/"+basePath+"/twitpic", uploadTwitpic)
 
 	r.Run(":" + getEnv("PORT", "3000"))
