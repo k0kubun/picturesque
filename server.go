@@ -20,7 +20,7 @@ func main() {
 	basePath := getEnv("KEY", "k0kubun")
 
 	r := gin.Default()
-	r.LoadHTMLTemplates("views/*")
+	r.LoadHTMLTemplates("/home/k0kubun/picturesque/views/*") // FIXME
 	r.GET("/", showIndex)
 	r.GET("/:image_path", showImage)
 	r.POST("/"+basePath+"/twitpic", uploadTwitpic)
