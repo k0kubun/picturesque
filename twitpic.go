@@ -62,7 +62,7 @@ func uploadTwitpic(c *gin.Context) {
 	c.XML(200, image{
 		Id:        0,
 		Text:      "text",
-		Url:       "http://localhost:3000/" + path,
+		Url:       "http://pic.k0kubun.com/" + path, // FIXME
 		Width:     0,
 		Height:    0,
 		Size:      0,
