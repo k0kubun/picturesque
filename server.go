@@ -7,10 +7,7 @@ import (
 )
 
 func showIndex(c *gin.Context) {
-	locals := gin.H{
-		"url": "https://github.com/k0kubun/picturesque",
-	}
-	c.HTML(200, "/home/k0kubun/picturesque/views/index.html", locals) // FIXME
+	c.String(200, "https://github.com/k0kubun/picturesque")
 }
 
 func main() {
