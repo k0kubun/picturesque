@@ -10,7 +10,7 @@ func showIndex(c *gin.Context) {
 	locals := gin.H{
 		"url": "https://github.com/k0kubun/picturesque",
 	}
-	c.HTML(200, "index.html", locals)
+	c.HTML(200, "/home/k0kubun/picturesque/views/index.html", locals) // FIXME
 }
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	basePath := getEnv("KEY", "k0kubun")
 
 	r := gin.Default()
-	r.LoadHTMLTemplates("/home/k0kubun/picturesque/views/*") // FIXME
+	r.LoadHTMLTemplates("views/*")
 	r.GET("/", showIndex)
 	r.GET("/:image_path", showImage)
 	r.POST("/"+basePath+"/twitpic", uploadTwitpic)
