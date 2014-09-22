@@ -25,5 +25,5 @@ func main() {
 	r.GET("/:image_path", showImage)
 	r.POST("/"+basePath+"/twitpic", uploadTwitpic)
 
-	r.Run(":" + getEnv("PORT", "3000"))
+	r.Run(":" + getEnv("PORT", "5000"))
 }
